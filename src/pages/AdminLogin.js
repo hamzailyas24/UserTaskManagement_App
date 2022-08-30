@@ -1,48 +1,59 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Form, Button, Container, Col, Row, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
-
-const baseURL = "http://localhost:4000/login";
 
 function AdminLogin() {
+  const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); 
-
-  // once user login successfully save the user_id in local storage whenever user open the app again or refresh the page it will automatically login the user again without the need to login again
 
   const handleLogin = async () => {
-    if (email === "" || password === "") {
+    if (username === "" || password === "") {
       setError(true);
-      setErrorMessage("Please enter email and password");
+      setErrorMessage("Please fill all the fields");
     } else {
-      setLoader(true);
       try {
-        const response = await axios.post(
-          "http://localhost:4000/login",
-          {
-            email: email,
-            password: password,
-          }
-        );
-        if (response.data.success === true) {
-          localStorage.setItem("user", response.data.user);
+        setLoader(true);
+        const response = await axios.post("http://localhost:4000/admin/login", {
+          username: username,
+          password: password,
+        });
+        // console.log("response ===>", response.data);
+        if (response.data.status === true) {
+          localStorage.setItem("admin_id", response.data.admin.admin_id);
+          localStorage.setItem("admin_name", response.data.admin.username);
+          navigate("/dashboard");
         } else {
           setError(true);
           setErrorMessage(response.data.message);
         }
+        setLoader(false);
       } catch (error) {
         setError(true);
-        setErrorMessage("Internal server error");
+        setErrorMessage("Something went wrong, Internal server error");
         console.log(error);
+        setLoader(false);
       }
-      setLoader(false);
     }
   };
+
+  const redirect = () => {
+    const adminID = localStorage.getItem("admin_id");
+    if (adminID) {
+      navigate("/dashboard");
+    } else {
+      navigate("/admin");
+    }
+  };
+
+  useEffect(() => {
+    redirect();
+  }, []);
 
   return (
     <>
@@ -51,7 +62,7 @@ function AdminLogin() {
       ) : (
         <Container>
           <h1 className="shadow mt-5 p-3 text-center rounded bg-dark text-white">
-            Admin Login
+            ADMIN LOGIN
           </h1>
           <Row className="mt-3">
             <Col lg={5} md={6} sm={12} className="p-5 m-auto shadow-sm rounded">
@@ -65,21 +76,21 @@ function AdminLogin() {
               ) : null}
 
               <Form.Group className="mt-2">
-                <Form.Label>Email</Form.Label>
+                <Form.Label>Username:</Form.Label>
                 <Form.Control
-                  type="email"
+                  type="text"
                   className="shadow-none border-dark rounded-0"
-                  placeholder="Email"
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="username"
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </Form.Group>
 
               <Form.Group className="mt-2">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Password:</Form.Label>
                 <Form.Control
                   type="password"
                   className="shadow-none border-dark rounded-0"
-                  placeholder="Password"
+                  placeholder="password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>

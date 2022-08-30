@@ -15,7 +15,6 @@ function Login() {
     if (email === "" || password === "") {
       setError(true);
       setErrorMessage("Please fill all the fields");
-      alert(errorMessage);
     } else {
       try {
         setLoader(true);
@@ -38,15 +37,9 @@ function Login() {
         setError(true);
         setErrorMessage("Something went wrong, Internal server error");
         console.log(error);
-        alert(errorMessage);
         setLoader(false);
       }
     }
-
-  };
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
   };
 
   const redirect = () => {

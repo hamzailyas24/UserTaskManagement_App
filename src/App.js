@@ -6,12 +6,9 @@ import Todo from './pages/Todo';
 
 function App() {
   return (
-    <div>
-      {/* <Signup /> */}
-      {/* <Login /> */}
-      {/* <Todo /> */}
+    <>
       <AppRouter />
-    </div>
+    </>
   );
 }
 

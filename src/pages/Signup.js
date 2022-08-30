@@ -123,6 +123,11 @@ function Signup() {
                   Signup
                 </Button>
               </div>
+
+                <div className="d-grid gap-2 mt-3">
+                  <p className="text-center text-primary text-decoration-underline" onClick={() => navigate('/')}> Already have an Account ? Login Here. </p>
+                </div>
+
             </Col>
           </Row>
         </Container>

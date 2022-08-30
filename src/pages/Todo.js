@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Container, InputGroup, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, InputGroup } from "react-bootstrap";
 import UsertaskTable from "../components/UsertaskTable";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 const addTaskURL = "http://localhost:4000/addtask";
 
@@ -93,9 +94,16 @@ function Todo() {
 
   return (
     <>
+      <Container fluid>
+        <Header />
+      </Container>
       <Container>
-        <h1 className="text-center my-5"> User Task Management Application </h1>
-        <InputGroup className="mt-3">
+        {/* <h1 className="text-center my-2 bg-light text-dark p-2">
+          {" "}
+          Task Management Application{" "}
+        </h1> */}
+        <Form.Group className="mt-4">
+          <Form.Label className="fw-bold">Title:</Form.Label>
           <Form.Control
             placeholder="Title"
             aria-label="Title"
@@ -104,8 +112,9 @@ function Todo() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-        </InputGroup>
-        <InputGroup className="mt-3">
+        </Form.Group>
+        <Form.Group className="mt-2">
+          <Form.Label className="fw-bold">Description:</Form.Label>
           <Form.Control
             placeholder="Description"
             as="textarea"
@@ -116,54 +125,69 @@ function Todo() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-        </InputGroup>
-        <InputGroup className="mt-3">
-          <Form.Label className="p-1">Priority:</Form.Label>
-          {priorityOptions.map((priorityOption) => (
-            <Form.Check
-              type="radio"
-              className="m-1"
-              label={priorityOption.name}
-              key={priorityOption.id}
-              name="priorityOptions"
-              id={priorityOption.id}
-              value={priorityOption.value}
-              onChange={(e) => setPriority(e.currentTarget.value)}
-            />
-          ))}
-        </InputGroup>
-        <InputGroup className="mt-3">
-          <Form.Control
-            placeholder="Time"
-            type="datetime-local"
-            aria-label="Time"
-            aria-describedby="Time"
-            value={datetime}
-            className="shadow-none border-dark rounded-0"
-            onChange={(e) => setDatetime(e.target.value)}
-          />
-        </InputGroup>
-        <InputGroup className="mt-3">
-          <Form.Select
-            aria-label="Status"
-            className="shadow-none border-dark rounded-0"
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="">Select Status</option>
-            {statusOptions.map((statusOption, i) => (
-              <option key={i} value={statusOption.value}>
-                {statusOption.label}
-              </option>
-            ))}
-          </Form.Select>
-        </InputGroup>
+        </Form.Group>
+        <div className="row">
+          <div className="col-md-4">
+            <Form.Label className="mt-2 fw-bold">Priority:</Form.Label>
+            <InputGroup
+              className="border border-dark d-flex justify-content-center align-item-center"
+              style={{ padding: "2px" }}
+            >
+              {priorityOptions.map((priorityOption) => (
+                <Form.Check
+                  type="radio"
+                  className="m-1"
+                  label={priorityOption.name}
+                  key={priorityOption.id}
+                  name="priorityOptions"
+                  id={priorityOption.id}
+                  value={priorityOption.value}
+                  onChange={(e) => setPriority(e.currentTarget.value)}
+                />
+              ))}
+            </InputGroup>
+          </div>
+
+          <div className="col-md-4">
+            <Form.Group className="mt-2">
+              <Form.Label className="fw-bold">Date Time:</Form.Label>
+              <Form.Control
+                type="datetime-local"
+                aria-label="Time"
+                aria-describedby="Time"
+                value={datetime}
+                className="shadow-none border-dark rounded-0"
+                onChange={(e) => setDatetime(e.target.value)}
+              />
+            </Form.Group>
+          </div>
+
+          <div className="col-md-4">
+            <Form.Group className="mt-2">
+              <Form.Label className="fw-bold">Status:</Form.Label>
+              <Form.Select
+                aria-label="Status"
+                className="shadow-none border-dark rounded-0"
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option value="">Select Status</option>
+                {statusOptions.map((statusOption, i) => (
+                  <option key={i} value={statusOption.value}>
+                    {statusOption.label}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </div>
+        </div>
         <div className="d-grid gap-2 mt-3">
           <Button
-            className="rounded-0 shadow-none border-dark bg-dark text-white fw-bold"
+            className="rounded-0 shadow-none text-white fw-bold"
+            variant="success"
             size="lg"
             onClick={addTask}
           >
-            ADD TODO
+            ADD TASK
           </Button>
         </div>
         <UsertaskTable />
