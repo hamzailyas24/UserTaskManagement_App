@@ -32,9 +32,12 @@ function UserTasks() {
   const viewTaskhandler = async () => {
     try {
       setLoader(true);
-      const response = await axios.post("http://localhost:4000/getalltasks", {
-        user_id: userID,
-      });
+      const response = await axios.post(
+        "https://usertaskmanagement.herokuapp.com/getalltasks",
+        {
+          user_id: userID,
+        }
+      );
       if (response.data.status === true) {
         setUsertasks(response.data.tasks);
         setLoader(false);
@@ -55,10 +58,13 @@ function UserTasks() {
     } else {
       try {
         setLoader(true);
-        const response = await axios.post("http://localhost:4000/giveremarks", {
-          task_id: task_id,
-          remarks: remarks,
-        });
+        const response = await axios.post(
+          "https://usertaskmanagement.herokuapp.com/giveremarks",
+          {
+            task_id: task_id,
+            remarks: remarks,
+          }
+        );
         setLoader(false);
         console.log(response.data);
         if (response.data.status === true) {

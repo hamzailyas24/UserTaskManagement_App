@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 
-const baseURL = "http://localhost:4000/getalltasks";
+const baseURL = "https://usertaskmanagement.herokuapp.com/getalltasks";
 
 const priorityOptions = [
   {
@@ -87,7 +87,7 @@ function UsertaskTable() {
 
   const deletetask = async (task_id) => {
     try {
-      const response = await axios.post("http://localhost:4000/deletetask", {
+      const response = await axios.post("https://usertaskmanagement.herokuapp.com/deletetask", {
         task_id: task_id,
       });
       if (response.data.status === true) {
@@ -112,7 +112,7 @@ function UsertaskTable() {
       alert("Please fill all the fields");
     } else {
       try {
-        const response = await axios.post("http://localhost:4000/updatetask", {
+        const response = await axios.post("https://usertaskmanagement.herokuapp.com/updatetask", {
           task_id: task_id,
           title: updateTitle,
           description: updateDescription,

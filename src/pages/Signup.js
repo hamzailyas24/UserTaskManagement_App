@@ -4,7 +4,7 @@ import { Container, Row, Col, Alert, Form, Button } from "react-bootstrap";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
-const baseURL = "http://localhost:4000/signup";
+const baseURL = "https://usertaskmanagement.herokuapp.com/signup";
 
 function Signup() {
   const navigate = useNavigate();

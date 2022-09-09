@@ -6,7 +6,7 @@ import AdminHeader from "../components/AdminHeader";
 import AdmintableRow from "../components/AdmintableRow";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-const getAllUsersURL = "http://localhost:4000/admin/getallusers";
+const getAllUsersURL = "https://usertaskmanagement.herokuapp.com/admin/getallusers";
 
 function Dashboard() {
   const navigate = useNavigate();
