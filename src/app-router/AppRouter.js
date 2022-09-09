@@ -4,6 +4,7 @@ import Dashboard from "../pages/Dashboard";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Todo from "../pages/Todo";
+import UserTasks from "../pages/UserTasks";
 
 function AppRouter() {
   return (
@@ -14,6 +15,7 @@ function AppRouter() {
         <Route path="/userapp" element={<Todo />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/:userID" element={<UserTasks />} />
       </Routes>
     </>
   );

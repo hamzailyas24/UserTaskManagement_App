@@ -10,7 +10,9 @@ function Header() {
 
   const handleLogout = () => {
     setLoader(true);
-    localStorage.clear();
+    localStorage.removeItem("userID");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
     setTimeout(() => {
       navigate("/", { replace: true });
     }, 100);

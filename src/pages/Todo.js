@@ -61,9 +61,7 @@ function Todo() {
         time: datetime,
         status: status,
       });
-      console.log(response);
       if (response.data.status === true) {
-        alert(response.data.message);
         setTitle("");
         setDescription("");
         setPriority("");
@@ -87,16 +85,15 @@ function Todo() {
     ) {
       alert("All fields are required");
     } else {
-      console.log(user_id, title, description, priority, datetime, status);
       addTaskhandler();
     }
   };
 
   return (
     <>
-      <Container fluid>
+      <>
         <Header />
-      </Container>
+      </>
       <Container>
         {/* <h1 className="text-center my-2 bg-light text-dark p-2">
           {" "}
