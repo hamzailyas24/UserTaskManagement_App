@@ -45,16 +45,9 @@ function Login() {
     }
   };
 
-  const redirect = () => {
-    const userID = localStorage.getItem("userID");
-    if (userID) {
-      navigate("/userapp");
-    }
-  };
-
   useEffect(() => {
     if (localStorage.getItem("userID")) {
-      redirect();
+      navigate("/userapp");
     }
   }, []);
   return (

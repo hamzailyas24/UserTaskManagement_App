@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Container, Row, Col, Alert, Form, Button } from "react-bootstrap";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const baseURL = "https://usertaskmanagement.herokuapp.com/signup";
 
@@ -52,6 +53,12 @@ function Signup() {
       }
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("userID")) {
+      navigate("/userapp");
+    }
+  }, []);
 
   return (
     <>

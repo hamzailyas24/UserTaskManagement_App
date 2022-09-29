@@ -13,43 +13,40 @@ function AdminLogin() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async () => {
-    try {
-      setLoader(true);
-      const response = await axios.post(
-        "https://usertaskmanagement.herokuapp.com/admin/login",
-        {
-          username: username,
-          password: password,
-        }
-      );
-      // console.log("response ===>", response.data);
-      if (response.data.status === true) {
-        localStorage.setItem("admin_id", response.data.admin.admin_id);
-        localStorage.setItem("admin_name", response.data.admin.username);
-        navigate("/dashboard");
-      } else {
-        setError(true);
-        setErrorMessage(response.data.message);
-      }
-      setLoader(false);
-    } catch (error) {
+    if (username === "" || password === "") {
       setError(true);
-      setErrorMessage("Something went wrong, Internal server error");
-      console.log(error);
-      setLoader(false);
+      setErrorMessage("Please Fill All the Fields.");
+    } else {
+      try {
+        setLoader(true);
+        const response = await axios.post(
+          "https://usertaskmanagement.herokuapp.com/admin/login",
+          {
+            username: username,
+            password: password,
+          }
+        );
+        if (response.data.status === true) {
+          localStorage.setItem("admin_id", response.data.admin.admin_id);
+          localStorage.setItem("admin_name", response.data.admin.username);
+          navigate("/dashboard");
+        } else {
+          setError(true);
+          setErrorMessage(response.data.message);
+        }
+        setLoader(false);
+      } catch (error) {
+        setError(true);
+        setErrorMessage("Something went wrong, Internal server error");
+        console.log(error);
+        setLoader(false);
+      }
     }
-  };
-
-  const redirect = () => {
-    const adminID = localStorage.getItem("admin_id");
-    if (adminID) {
-      navigate("/dashboard");
-    } 
   };
 
   useEffect(() => {
     if (localStorage.getItem("admin_id")) {
-      redirect();
+      navigate("/dashboard");
     }
   }, []);
 
