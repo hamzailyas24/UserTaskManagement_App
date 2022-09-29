@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Container, Form, Button, InputGroup } from "react-bootstrap";
 import UsertaskTable from "../components/UsertaskTable";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
 const addTaskURL = "https://usertaskmanagement.herokuapp.com/addtask";
@@ -47,8 +46,8 @@ function Todo() {
   const [priority, setPriority] = useState("");
   const [datetime, setDatetime] = useState("");
   const [status, setStatus] = useState("");
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [error, setError] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState("");
 
   const addTaskhandler = async () => {
     try {

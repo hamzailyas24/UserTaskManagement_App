@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import AdminHeader from "../components/AdminHeader";
 import AdmintableRow from "../components/AdmintableRow";
 import LoadingSpinner from "../components/LoadingSpinner";
