@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
-import UsertableRow from "./UsertableRow";
 
 const baseURL = "https://usertaskmanagement.herokuapp.com/getalltasks";
 
