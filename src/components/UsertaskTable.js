@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
+import UsertableRow from "./UsertableRow";
 
 const baseURL = "https://usertaskmanagement.herokuapp.com/getalltasks";
 
@@ -51,6 +52,75 @@ function UsertaskTable() {
   const [updateStatus, setUpdateStatus] = useState("");
   const [show, setShow] = useState(false);
 
+  const getTasks = async () => {
+    try {
+      const response = await axios.post(baseURL, {
+        user_id: user_id,
+      });
+      if (response.data.status === true) {
+        setTasks(response.data.tasks);
+      } else {
+        alert(response.data.message);
+        console.log("getTasks says ===>", response.data.message);
+      }
+    } catch (error) {
+      console.log("CATCH RUN in getTasks ===>", error);
+    }
+  };
+
+  const deletetask = async (task_id) => {
+    try {
+      const response = await axios.post(
+        "https://usertaskmanagement.herokuapp.com/deletetask",
+        {
+          task_id: task_id,
+        }
+      );
+      if (response.data.status === true) {
+        getTasks();
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.log("CATCH RUN in deleteTask ===>", error);
+    }
+  };
+
+  const updatetask = async (task_id) => {
+    if (
+      updateTitle === "" ||
+      updateDescription === "" ||
+      updatePriority === "" ||
+      updateTime === "" ||
+      updateStatus === ""
+    ) {
+      alert("Please fill all the fields");
+    } else {
+      try {
+        const response = await axios.post(
+          "https://usertaskmanagement.herokuapp.com/updatetask",
+          {
+            task_id: task_id,
+            title: updateTitle,
+            description: updateDescription,
+            priority: updatePriority,
+            time: updateTime,
+            status: updateStatus,
+          }
+        );
+
+        if (response.data.status === true) {
+          handleClose();
+          getTasks();
+        } else {
+          alert(response.data.message);
+        }
+      } catch (error) {
+        console.log("CATCH RUN in updateTask ===>", error);
+      }
+    }
+  };
+
   const handleClose = () => {
     setShow(false);
     setUpdateID("");
@@ -70,72 +140,10 @@ function UsertaskTable() {
     setUpdateStatus(task.status);
   };
 
-  const getTasks = async () => {
-    try {
-      const response = await axios.post(baseURL, {
-        user_id: user_id,
-      });
-      if (response.data.status === true) {
-        setTasks(response.data.tasks);
-      } else {
-        alert(response.data.message);
-      }
-    } catch (error) {
-      console.log("error ===>", error);
-    }
-  };
-
-  const deletetask = async (task_id) => {
-    try {
-      const response = await axios.post("https://usertaskmanagement.herokuapp.com/deletetask", {
-        task_id: task_id,
-      });
-      if (response.data.status === true) {
-        getTasks();
-      } else {
-        alert("Something went wrong in deleting task");
-      }
-    } catch (error) {
-      console.log("error ===>", error);
-      alert("something went wrong ====> Internal Server Error");
-    }
-  };
-
-  const updatetask = async (task_id) => {
-    if (
-      updateTitle === "" ||
-      updateDescription === "" ||
-      updatePriority === "" ||
-      updateTime === "" ||
-      updateStatus === ""
-    ) {
-      alert("Please fill all the fields");
-    } else {
-      try {
-        const response = await axios.post("https://usertaskmanagement.herokuapp.com/updatetask", {
-          task_id: task_id,
-          title: updateTitle,
-          description: updateDescription,
-          priority: updatePriority,
-          time: updateTime,
-          status: updateStatus,
-        });
-
-        if (response.data.status === true) {
-          handleClose();
-          getTasks();
-        } else {
-          alert(response.data.message);
-        }
-      } catch (error) {
-        console.log("error ===>", error);
-        alert("Something went wrong");
-      }
-    }
-  };
-
   useEffect(() => {
-    getTasks();
+    if (localStorage.getItem("userID")) {
+      getTasks();
+    }
   }, []);
 
   return (

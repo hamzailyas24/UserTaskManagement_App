@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Alert, Form, Button } from "react-bootstrap";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,6 @@ function Signup() {
           email: email,
           password: password,
         });
-        // console.log("response ===>", response.data);
         if (response.data.status === true) {
           alert(response.data.message);
           navigate("/");
@@ -60,7 +59,7 @@ function Signup() {
         <LoadingSpinner />
       ) : (
         <Container>
-          <h1 className="shadow mt-5 p-3 text-center rounded bg-dark text-white">
+          <h1 className="shadow mt-4 p-3 text-center rounded bg-dark text-white">
             Signup Here
           </h1>
           <Row className="mt-3">
@@ -74,40 +73,40 @@ function Signup() {
                 </Alert>
               ) : null}
               <Form.Group>
-                <Form.Label>First Name</Form.Label>
+                <Form.Label>First Name: </Form.Label>
                 <Form.Control
                   type="name"
-                  className="shadow-none border-dark rounded-0"
+                  className="shadow-none border-dark rounded-1"
                   placeholder="First Name"
-                  onChange={(e) => setFirstName(e.target.value)}
+                  onChange={(e) => setFirstName(e.target.value.toLowerCase())}
                 />
               </Form.Group>
 
               <Form.Group className="mt-2">
-                <Form.Label>Last Name</Form.Label>
+                <Form.Label>Last Name: </Form.Label>
                 <Form.Control
                   type="name"
-                  className="shadow-none border-dark rounded-0"
+                  className="shadow-none border-dark rounded-1"
                   placeholder="Last Name"
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={(e) => setLastName(e.target.value.toLowerCase())}
                 />
               </Form.Group>
 
               <Form.Group className="mt-2">
-                <Form.Label>Email</Form.Label>
+                <Form.Label>Email: </Form.Label>
                 <Form.Control
                   type="email"
-                  className="shadow-none border-dark rounded-0"
+                  className="shadow-none border-dark rounded-1"
                   placeholder="Email"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
                 />
               </Form.Group>
 
               <Form.Group className="mt-2">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Password: </Form.Label>
                 <Form.Control
                   type="password"
-                  className="shadow-none border-dark rounded-0"
+                  className="shadow-none border-dark rounded-1"
                   placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -115,24 +114,27 @@ function Signup() {
 
               <div className="d-grid gap-2 mt-3">
                 <Button
-                  style={{ background: "black", border: "1px solid #000" }}
-                  className="rounded-0 shadow-none"
+                  style={{
+                    background: "black",
+                    border: "1px solid #000",
+                    cursor: "pointer",
+                  }}
+                  className="rounded-1 shadow-none"
                   size="lg"
                   onClick={handleSignup}
                 >
-                  Signup
+                  CREATE ACCOUNT
                 </Button>
               </div>
 
-              <div className="d-grid gap-2 mt-3">
-                <p
+              <div className="text-center mt-3">
+                <span
                   className="text-center text-primary text-decoration-underline"
                   style={{ cursor: "pointer" }}
                   onClick={() => navigate("/")}
                 >
-                  {" "}
-                  Already have an Account ? Login Here.{" "}
-                </p>
+                  Already have an Account ? Login Here.
+                </span>
               </div>
             </Col>
           </Row>

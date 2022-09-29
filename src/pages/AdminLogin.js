@@ -13,32 +13,30 @@ function AdminLogin() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async () => {
-    if (username === "" || password === "") {
-      setError(true);
-      setErrorMessage("Please fill all the fields");
-    } else {
-      try {
-        setLoader(true);
-        const response = await axios.post("https://usertaskmanagement.herokuapp.com/admin/login", {
+    try {
+      setLoader(true);
+      const response = await axios.post(
+        "https://usertaskmanagement.herokuapp.com/admin/login",
+        {
           username: username,
           password: password,
-        });
-        // console.log("response ===>", response.data);
-        if (response.data.status === true) {
-          localStorage.setItem("admin_id", response.data.admin.admin_id);
-          localStorage.setItem("admin_name", response.data.admin.username);
-          navigate("/dashboard");
-        } else {
-          setError(true);
-          setErrorMessage(response.data.message);
         }
-        setLoader(false);
-      } catch (error) {
+      );
+      // console.log("response ===>", response.data);
+      if (response.data.status === true) {
+        localStorage.setItem("admin_id", response.data.admin.admin_id);
+        localStorage.setItem("admin_name", response.data.admin.username);
+        navigate("/dashboard");
+      } else {
         setError(true);
-        setErrorMessage("Something went wrong, Internal server error");
-        console.log(error);
-        setLoader(false);
+        setErrorMessage(response.data.message);
       }
+      setLoader(false);
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Something went wrong, Internal server error");
+      console.log(error);
+      setLoader(false);
     }
   };
 
@@ -46,13 +44,13 @@ function AdminLogin() {
     const adminID = localStorage.getItem("admin_id");
     if (adminID) {
       navigate("/dashboard");
-    } else {
-      navigate("/admin");
-    }
+    } 
   };
 
   useEffect(() => {
-    redirect();
+    if (localStorage.getItem("admin_id")) {
+      redirect();
+    }
   }, []);
 
   return (
@@ -81,7 +79,7 @@ function AdminLogin() {
                   type="text"
                   className="shadow-none border-dark rounded-0"
                   placeholder="username"
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value.toLowerCase())}
                 />
               </Form.Group>
 

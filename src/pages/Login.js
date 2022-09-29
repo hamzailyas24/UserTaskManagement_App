@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
-import LoadingSpinner from "../components/LoadingSpinner";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Row, Container, Col, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
+
+const baseURL = "https://usertaskmanagement.herokuapp.com/login";
+
 function Login() {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
@@ -18,11 +21,10 @@ function Login() {
     } else {
       try {
         setLoader(true);
-        const response = await axios.post("https://usertaskmanagement.herokuapp.com/login", {
+        const response = await axios.post(baseURL, {
           email: email,
           password: password,
         });
-        console.log("response ===>", response.data);
         if (response.data.status === true) {
           localStorage.setItem("userID", response.data.user.user_id);
           localStorage.setItem("firstName", response.data.user.first_name);
@@ -35,7 +37,8 @@ function Login() {
         setLoader(false);
       } catch (error) {
         setError(true);
-        setErrorMessage("Something went wrong, Internal server error");
+        setErrorMessage(error.message);
+        console.log("CATCH RUN in handle Login ===>", error.message);
         console.log(error);
         setLoader(false);
       }
@@ -46,13 +49,13 @@ function Login() {
     const userID = localStorage.getItem("userID");
     if (userID) {
       navigate("/userapp");
-    } else {
-      navigate("/");
     }
   };
 
   useEffect(() => {
-    redirect();
+    if (localStorage.getItem("userID")) {
+      redirect();
+    }
   }, []);
   return (
     <>
@@ -63,8 +66,13 @@ function Login() {
           <h1 className="shadow mt-5 p-3 text-center rounded bg-dark text-white">
             Login Here
           </h1>
-          <Row className="mt-3">
-            <Col lg={5} md={6} sm={12} className="p-5 m-auto shadow-sm rounded">
+          <Row className="mt-4">
+            <Col
+              lg={5}
+              md={6}
+              sm={12}
+              className="p-5 m-auto shadow-sm rounded bg-light"
+            >
               {error ? (
                 <Alert variant="danger">
                   <i className="fas fa-exclamation-triangle"></i>
@@ -75,20 +83,20 @@ function Login() {
               ) : null}
 
               <Form.Group className="mt-2">
-                <Form.Label>Email</Form.Label>
+                <Form.Label>Email: </Form.Label>
                 <Form.Control
                   type="email"
-                  className="shadow-none border-dark rounded-0"
+                  className="shadow-none border-dark rounded-1"
                   placeholder="Email"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
                 />
               </Form.Group>
 
               <Form.Group className="mt-2">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Password: </Form.Label>
                 <Form.Control
                   type="password"
-                  className="shadow-none border-dark rounded-0"
+                  className="shadow-none border-dark rounded-1"
                   placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -97,22 +105,22 @@ function Login() {
               <div className="d-grid gap-2 mt-3">
                 <Button
                   style={{ background: "black", border: "1px solid #000" }}
-                  className="rounded-0 shadow-none"
+                  className="rounded-1 shadow-none"
                   size="lg"
                   onClick={handleLogin}
                 >
-                  Login
+                  LOGIN
                 </Button>
               </div>
 
               <div className="d-grid gap-2 mt-3">
                 <Button
                   style={{ background: "black", border: "1px solid #000" }}
-                  className="rounded-0 shadow-none"
+                  className="rounded-1 shadow-none"
                   size="lg"
                   onClick={() => navigate("/signup")}
                 >
-                  Signup
+                  SIGNUP
                 </Button>
               </div>
             </Col>

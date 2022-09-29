@@ -42,7 +42,6 @@ const statusOptions = [
 
 function Todo() {
   const user_id = localStorage.getItem("userID");
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
@@ -69,6 +68,7 @@ function Todo() {
         setStatus("");
       } else {
         alert(response.data.message);
+        // console.log("addTaskHandler ===>", response.data.message);
       }
     } catch (error) {
       console.log(error);
@@ -95,10 +95,6 @@ function Todo() {
         <Header />
       </>
       <Container>
-        {/* <h1 className="text-center my-2 bg-light text-dark p-2">
-          {" "}
-          Task Management Application{" "}
-        </h1> */}
         <Form.Group className="mt-4">
           <Form.Label className="fw-bold">Title:</Form.Label>
           <Form.Control
@@ -107,7 +103,7 @@ function Todo() {
             aria-describedby="Title"
             className="shadow-none border-dark rounded-0"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value.toLowerCase())}
           />
         </Form.Group>
         <Form.Group className="mt-2">
@@ -120,7 +116,7 @@ function Todo() {
             aria-describedby="Description"
             className="shadow-none border-dark rounded-0"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value.toLowerCase())}
           />
         </Form.Group>
         <div className="row">

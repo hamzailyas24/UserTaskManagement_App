@@ -1,37 +1,44 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Container, Table } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "../components/AdminHeader";
 import AdmintableRow from "../components/AdmintableRow";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-const getAllUsersURL = "https://usertaskmanagement.herokuapp.com/admin/getallusers";
+const getAllUsersURL =
+  "https://usertaskmanagement.herokuapp.com/admin/getallusers";
 
 function Dashboard() {
-  const navigate = useNavigate();
   const admin_id = localStorage.getItem("admin_id");
   const [loader, setLoader] = useState(false);
   const [users, setUsers] = useState([]);
 
   const usersHandle = async () => {
     try {
+      setLoader(true);
       const response = await axios.post(getAllUsersURL, {
         admin_id: admin_id,
       });
+      console.log(response.data.status);
       if (response.data.status === true) {
         setUsers(response.data.users);
-        console.log("Userhandle RESPONSE ===>", response.data.users);
+        setLoader(false);
       } else {
         alert("ERROR in usersHanlde");
+        setLoader(false);
+        console.log(response.data.message);
       }
     } catch (error) {
       console.log("ERROR ===>", error);
+      setLoader(false);
     }
   };
 
   useEffect(() => {
-    usersHandle();
+    if (admin_id) {
+      usersHandle();
+    }
   }, []);
 
   return (
