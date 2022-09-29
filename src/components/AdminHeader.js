@@ -3,17 +3,14 @@ import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function AdminHeader() {
-  const [loader, setLoader] = useState(false);
   const adminName = localStorage.getItem("admin_name");
   const navigate = useNavigate();
   const handleLogout = () => {
-    setLoader(true);
     localStorage.removeItem("admin_id");
     localStorage.removeItem("admin_name");
     setTimeout(() => {
       navigate("/admin", { replace: true });
     }, 100);
-    setLoader(false);
   };
 
   return (
