@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
-
-const baseURL = "https://usertaskmanagement.herokuapp.com/getalltasks";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTasks } from "../redux/actions/fetchUsertasks";
 
 const priorityOptions = [
   {
@@ -41,8 +41,7 @@ const statusOptions = [
 ];
 
 function UsertaskTable() {
-  const user_id = localStorage.getItem("userID");
-  const [tasks, setTasks] = useState([]);
+  const dispatch = useDispatch();
   const [updateID, setUpdateID] = useState("");
   const [updateTitle, setUpdateTitle] = useState("");
   const [updateDescription, setUpdateDescription] = useState("");
@@ -51,32 +50,16 @@ function UsertaskTable() {
   const [updateStatus, setUpdateStatus] = useState("");
   const [show, setShow] = useState(false);
 
-  const getTasks = async () => {
-    try {
-      const response = await axios.post(baseURL, {
-        user_id: user_id,
-      });
-      if (response.data.status === true) {
-        setTasks(response.data.tasks);
-      } else {
-        alert(response.data.message);
-        console.log("getTasks says ===>", response.data.message);
-      }
-    } catch (error) {
-      console.log("CATCH RUN in getTasks ===>", error);
-    }
-  };
-
   const deletetask = async (task_id) => {
     try {
       const response = await axios.post(
-        "https://usertaskmanagement.herokuapp.com/deletetask",
+        `${process.env.REACT_APP_BASEURL}/deletetask`,
         {
           task_id: task_id,
         }
       );
       if (response.data.status === true) {
-        getTasks();
+        dispatch(fetchTasks());
       } else {
         alert(response.data.message);
       }
@@ -97,7 +80,7 @@ function UsertaskTable() {
     } else {
       try {
         const response = await axios.post(
-          "https://usertaskmanagement.herokuapp.com/updatetask",
+          `${process.env.REACT_APP_BASEURL}/updatetask`,
           {
             task_id: task_id,
             title: updateTitle,
@@ -110,7 +93,7 @@ function UsertaskTable() {
 
         if (response.data.status === true) {
           handleClose();
-          getTasks();
+          dispatch(fetchTasks());
         } else {
           alert(response.data.message);
         }
@@ -139,16 +122,22 @@ function UsertaskTable() {
     setUpdateStatus(task.status);
   };
 
+  // function formatHoursTo12(date) {
+  //   return date.getHours() % 12 || 12;
+  // }
+
+  const userTasks = useSelector((state) => state.userTasks.tasks);
+
   useEffect(() => {
     if (localStorage.getItem("userID")) {
-      getTasks();
+      dispatch(fetchTasks());
+      console.log("USER_TASK_TABLE");
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
       <h3 className="text-center mt-5 bg-light text-dark p-2">Your Tasks</h3>
-
       <Table responsive striped bordered hover size="sm" className="mt-2">
         <thead>
           <tr className="text-center">
@@ -163,7 +152,7 @@ function UsertaskTable() {
           </tr>
         </thead>
         <tbody>
-          {tasks.map((task, index) => {
+          {userTasks.map((task, index) => {
             return (
               <tr key={task._id} className="text-center text-capitalize">
                 <td>{index}</td>
@@ -171,7 +160,11 @@ function UsertaskTable() {
                 <td>{task.description}</td>
                 <td>{task.priority}</td>
                 <td>{task.status}</td>
-                <td>{task.remarks}</td>
+                {task.remarks === "bad" ? (
+                  <td className="text-danger fw-bold">{task.remarks}</td>
+                ) : (
+                  <td className="text-success fw-bold">{task.remarks}</td>
+                )}
                 <td>{new Date(task.time).toLocaleString().split(",")}</td>
                 <td className="d-flex justify-content-center align-item-center">
                   <Button
